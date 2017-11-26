@@ -23,7 +23,7 @@ var visualRecognition = watson.visual_recognition({
     version: 'v3',
     version_date: '2016-05-19',
     // Uncomment the line below to specify the API Key
-    api_key: process.env.VISUAL_RECOGNITION_API_KEY || 'a0751913ea0496dd7ca32fa7d8c22231e35754ab'
+    // api_key: process.env.VISUAL_RECOGNITION_API_KEY || '<api_key>'
 });
 /*{
   "url": "https://gateway-a.watsonplatform.net/visual-recognition/api",

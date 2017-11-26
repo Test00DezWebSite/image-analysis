@@ -17,38 +17,43 @@
 'use strict';
 
 var watson = require('watson-developer-cloud'),
-  util = require('../util');
+    util = require('../util');
 
 var textToSpeech = watson.text_to_speech({
-  version: 'v1',
-// uncomment the lines below to specify username and password
-//   username: process.env.TEXT_TO_SPEECH_USERNAME || '<username>',
-//   password: process.env.TEXT_TO_SPEECH_PASSWORD || '<password>'
+    version: 'v1',
+    // uncomment the lines below to specify username and password
+    //   username: process.env.TEXT_TO_SPEECH_USERNAME || '<username>',
+    //   password: process.env.TEXT_TO_SPEECH_PASSWORD || '<password>'
 });
+/*{
+  "url": "https://stream.watsonplatform.net/text-to-speech/api",
+  "username": "1a52d2b5-7fe5-4e95-b945-ac2c108f2e82",
+  "password": "kFhN4OZkgHPb"
+}*/
 
 module.exports.voices = function(req, res, next) {
-  textToSpeech.voices({}, function(error, result) {
-    if (error)
-      return next(error);
-    else
-      return res.json(result);
-  });
+    textToSpeech.voices({}, function(error, result) {
+        if (error)
+            return next(error);
+        else
+            return res.json(result);
+    });
 };
 
 module.exports.speak = function(req, res, next) {
-  var params = {
-    text: req.body.text,
-    voice: req.body.voice || 'en-US_MichaelVoice',
-    accept: 'audio/wav'
-  };
-  var stream = textToSpeech.synthesize(params);
+    var params = {
+        text: req.body.text,
+        voice: req.body.voice || 'en-US_MichaelVoice',
+        accept: 'audio/wav'
+    };
+    var stream = textToSpeech.synthesize(params);
 
-  stream.on('error',next);
+    stream.on('error', next);
 
-  var userAgent = req.headers['user-agent'];
-  if (!/iPhone|iPad|iPod|Safari/i.test(userAgent)) {
-    return stream.pipe(res);
-  } else {
-    return util.fixEncoding(stream, res);
-  }
+    var userAgent = req.headers['user-agent'];
+    if (!/iPhone|iPad|iPod|Safari/i.test(userAgent)) {
+        return stream.pipe(res);
+    } else {
+        return util.fixEncoding(stream, res);
+    }
 };
